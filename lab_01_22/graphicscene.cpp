@@ -3,7 +3,6 @@
 GraphicScene::GraphicScene(double x, double y, double w, double h, bool isVisible, QObject *parent)
     : QGraphicsScene{parent}
 {
-    // std::cout<< "constructor" << std::endl;
     this->setGridVisibility(isVisible);
     this->setPlane(x, y, w, h, false);
     this->setGraphicsWindow(x, y, w, h, false);
@@ -11,102 +10,94 @@ GraphicScene::GraphicScene(double x, double y, double w, double h, bool isVisibl
     this->zoomPercent = 100;
 }
 
-void GraphicScene::setCX(double c)
-{
-    // std::cout<< "setCX" << std::endl;
-    this->cX = c;
-}
-
-void GraphicScene::setCY(double c)
-{
-    // std::cout<< "setCY" << std::endl;
-    this->cY = c;
-}
-
 double GraphicScene::getCX(void)
 {
-    // std::cout<< "getCX" << std::endl;
     return this->cX;
 }
 
 double GraphicScene::getCY(void)
 {
-    // std::cout<< "getCY" << std::endl;
     return this->cY;
 }
 
-void GraphicScene::setGridVisibility(bool value)
+void GraphicScene::setCX(double c)
 {
-    // std::cout<< "setGridVisibility" << std::endl;
-    gridVisible = value;
-    this->update();
+    this->cX = c;
+}
+
+void GraphicScene::setCY(double c)
+{
+    this->cY = c;
 }
 
 bool GraphicScene::gridIsVisible(void)
 {
-    // std::cout<< "gridIsVisible" << std::endl;
     return gridVisible;
+}
+
+void GraphicScene::setGridVisibility(bool value)
+{
+    gridVisible = value;
+    this->update();
+}
+
+void GraphicScene::setPlane(QRectF rect, bool update)
+{
+    this->plane = rect;
+    this->computeCoefficients();
+
+    if (update)
+    {
+        this->update();
+    }
 }
 
 void GraphicScene::setPlane(double x, double y, double w, double h, bool update)
 {
-    // std::cout<< "setPlane2" << std::endl;
     this->plane = QRectF(x, y, w, h);
     this->computeCoefficients();
 
     if (update)
-    {
         this->update();
-    }
 }
 
 void GraphicScene::setPlane(QPointF topLeft, double w, double h, bool update)
 {
-    // std::cout<< "setPlane1" << std::endl;
     this->plane = QRectF(topLeft.x(), topLeft.y(), w, h);
     this->computeCoefficients();
 
     if (update)
-    {
-        // std::cout<< "updating after plane change" << std::endl;
         this->update();
-    }
 }
 
 QRectF GraphicScene::getPlane(void)
 {
-    // std::cout<< "getPlane" << std::endl;
     return this->plane;
 }
 
 void GraphicScene::setGraphicsWindow(double x, double y, double w, double h, bool update)
 {
-    // std::cout<< "getGraphicsWindow coords" << std::endl;
     this->graphicsWindow = QRectF(x, y, w, h);
+    this->originalGraphicsWindow = QRectF(x, y, w, h);
     this->computeCoefficients();
 
     if (update)
-    {
         this->update();
-    }
 }
 
 void GraphicScene::setGraphicsWindow(QRectF rect)
 {
-    // std::cout<< "setGraphicsWindow" << std::endl;
     this->graphicsWindow = rect;
     this->computeCoefficients();
 }
 
 QRectF GraphicScene::getGraphicsWindow(void)
 {
-    // // std::cout<< "getGraphicsWindow" << std::endl;
     return this->graphicsWindow;
 }
 
 void GraphicScene::computeCoefficients(void)
 {
-    // std::cout<< "computeCoefficients" << std::endl;
     if (!this->plane.isValid() || !this->graphicsWindow.isValid())
     {
         return;
@@ -114,18 +105,15 @@ void GraphicScene::computeCoefficients(void)
 
     this->setCX(this->graphicsWindow.width() / this->plane.width());
     this->setCY(this->graphicsWindow.height() / this->plane.height());
-
-    // std::cout<< "cx: " << this->cX << " cy: " << this->cY << std::endl;
 }
 
 QPointF GraphicScene::toPlaneCoords(QPointF windowCoords)
 {
-    // std::cout<< "toPlaneCoords" << std::endl;
     QPointF planeCoords = windowCoords;
 
     if (this->cX == 0 || this->cY == 0)
     {
-        throw new std::runtime_error("Коэффициент равен нулю, невозможно перевести координаты");
+        throw std::runtime_error("Коэффициент равен нулю. Невозможно совершить преобразование"); //new?
     }
 
     planeCoords.setX((windowCoords.x() - this->graphicsWindow.topLeft().x()) / this->cX + this->plane.topLeft().x());
@@ -136,7 +124,6 @@ QPointF GraphicScene::toPlaneCoords(QPointF windowCoords)
 
 QPointF GraphicScene::toWindowCoords(QPointF planeCoords)
 {
-    // std::cout<< "toWindowCoords" << std::endl;
     QPointF windowCoords = planeCoords;
 
     windowCoords.setX((planeCoords.x() - this->plane.topLeft().x()) * this->cX + this->graphicsWindow.topLeft().x());
@@ -147,26 +134,26 @@ QPointF GraphicScene::toWindowCoords(QPointF planeCoords)
 
 void GraphicScene::drawForeground(QPainter *painter, const QRectF &rect)
 {
-    // std::cout<< "drawForeground" << std::endl;
     this->setGraphicsWindow(rect);
     painter->setPen(Qt::blue);
     painter->setBrush(Qt::blue);
     for (auto point : this->points)
-
     {
         this->drawPoint(painter, point, 0.008);
     }
+    if (showSolution)
+        this->drawPointConnections(painter, res_triangle);
 }
 
 void GraphicScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
-    // update graphics
+    // graphics update
     this->setGraphicsWindow(rect);
 
-    // white background
+    // background colour to white
     painter->fillRect(this->getGraphicsWindow(), Qt::white);
 
-    // draw lines and center
+    // lines and center
     painter->setPen(Qt::black);
     bool intersectsX = this->plane.top() <= 0 && this->plane.bottom() >= 0;
     bool intersectsY = this->plane.left() <= 0 && this->plane.right() >= 0;
@@ -205,6 +192,7 @@ void GraphicScene::drawBackground(QPainter *painter, const QRectF &rect)
         painter->drawLine(left, right);
     }
 
+    // so that it would stay
     painter->setPen(Qt::black);
     if (intersectsX)
     {
@@ -222,7 +210,6 @@ void GraphicScene::drawBackground(QPainter *painter, const QRectF &rect)
 
 void GraphicScene::drawXAxis(QPainter *painter)
 {
-    // std::cout<< "drawXAxis" << std::endl;
     painter->setPen(Qt::black);
     QPointF xAxisStart = this->toWindowCoords(QPointF(this->plane.left(), 0));
     QPointF xAxisEnd = this->toWindowCoords(QPointF(this->plane.right(), 0));
@@ -231,7 +218,6 @@ void GraphicScene::drawXAxis(QPainter *painter)
 
 void GraphicScene::drawYAxis(QPainter *painter)
 {
-    // std::cout<< "drawYAxis" << std::endl;
     painter->setPen(Qt::black);
     QPointF yAxisStart = this->toWindowCoords(QPointF(0, this->plane.top()));
     QPointF yAxisEnd = this->toWindowCoords(QPointF(0, this->plane.bottom()));
@@ -240,7 +226,6 @@ void GraphicScene::drawYAxis(QPainter *painter)
 
 void GraphicScene::drawCenter(QPainter *painter)
 {
-    // std::cout<< "drawCenter" << std::endl;
     painter->setPen(Qt::red);
     painter->setBrush(Qt::red);
     QPointF center = QPointF(0, 0);
@@ -252,19 +237,37 @@ void GraphicScene::drawCenter(QPainter *painter)
  * @brief Draws a point on coordinate plane
  * @param painter doesn't change pen/brush color itself
  * @param point plane coordinates
+ * @param k size coefficient
  */
 void GraphicScene::drawPoint(QPainter *painter, QPointF point, double k)
 {
-    // std::cout<< "drawPoint" << std::endl;
     QPointF convertedPoint = this->toWindowCoords(point);
     double rx = this->graphicsWindow.width() * k;
     double ry = this->graphicsWindow.height() * k;
     painter->drawEllipse(convertedPoint, rx, ry);
 }
 
+void GraphicScene::drawPointConnections(QPainter *painter, QVector<QPointF> pointsToConnect)
+{
+    auto arr_size = pointsToConnect.size();
+    if (arr_size < 3)
+        return;
+    for (auto i = 0; i < arr_size; i++)
+    {
+        QPointF convertedPoint1 = this->toWindowCoords(pointsToConnect[i % arr_size]);
+        QPointF convertedPoint2 = this->toWindowCoords(pointsToConnect[(i + 1) % arr_size]);
+        painter->drawLine(convertedPoint1, convertedPoint2);
+        if (i == bisectorFrom)
+        {
+            QPointF convertedTop = this->toWindowCoords(pointsToConnect[i]);
+            QPointF convertedBisec = this->toWindowCoords(bisectorPoint);
+            painter->drawLine(convertedTop, convertedBisec);
+        }
+    }
+}
+
 void GraphicScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    // std::cout<< "Mouse press" << std::endl;
     QPointF windowPoint = mouseEvent->scenePos();
     Qt::MouseButton buttonPressed = mouseEvent->button();
     if (buttonPressed == Qt::MouseButton::LeftButton)
@@ -287,11 +290,8 @@ void GraphicScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void GraphicScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    // // std::cout<< "Mouse move" << std::endl;
-    // // std::cout<< "mouse buttons: " << mouseEvent->buttons().toInt() << std::endl;
     if (mouseEvent->buttons() & Qt::MouseButton::MiddleButton)
     {
-        // std::cout<< "Dragging" << std::endl;
         QPointF dragEndPos = this->toPlaneCoords(mouseEvent->scenePos());
         QPointF translation = dragEndPos - this->dragStartPos;
 
@@ -308,26 +308,27 @@ void GraphicScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void GraphicScene::wheelEvent(QGraphicsSceneWheelEvent *wheelEvent)
 {
-    // std::cout<< "wheelEvent" << std::endl;
     double delta = wheelEvent->pixelDelta().y();
     QPointF cursorPos = wheelEvent->scenePos();
-    // std::cout<< "cursor pos: " << cursorPos.x() << " " << cursorPos.y() << std::endl;
+
     double zoom = 1 - delta / this->graphicsWindow.width();
     if ((this->zoomPercent / zoom < 1) || (this->zoomPercent / zoom > 1000))
         return;
+
     double xRatio = (cursorPos.x() - this->graphicsWindow.left()) / this->graphicsWindow.width();
     double yRatio = (cursorPos.y() - this->graphicsWindow.top()) / this->graphicsWindow.height();
-    // std::cout<< "ratios: " << xRatio << " " << yRatio << std::endl;
+
     QPointF newTopLeft = QPointF(
         cursorPos.x() - xRatio * zoom * this->graphicsWindow.width(),
         cursorPos.y() - yRatio * zoom * this->graphicsWindow.height()
         );
     QPointF newTopLeftPlane = this->toPlaneCoords(newTopLeft);
-    // std::cout<< "new top left: " << newTopLeftPlane.x() << " " << newTopLeftPlane.y() << std::endl;
+
     this->setPlane(
         newTopLeftPlane,
         this->plane.width() * zoom, this->plane.height() * zoom
         );
+
     this->zoomPercent /= zoom;
     emit zoomChanged(this->zoomPercent);
 }
@@ -336,25 +337,22 @@ void GraphicScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     Qt::MouseButton buttonPressed = mouseEvent->button();
     if (buttonPressed == Qt::MouseButton::MiddleButton)
-    {
         this->isDragged = false;
-    }
 }
 
 void GraphicScene::removeIntersectingPoint(QPointF clickedPoint)
 {
-    // std::cout<< "removeIntersectingPoint" << std::endl;
     int index = -1;
     double minDistance = INFINITY;
     double pointSize = this->graphicsWindow.height() * 0.01 / this->cX;
-    // // std::cout<< "Point size: " << pointSize << std::endl;
-    for (size_t i = 0; i < this->points.size(); i++)
+
+    for (qsizetype i = 0; i < this->points.size(); i++)
     {
-        double curDistance = this->getDistance(this->points[i], clickedPoint);
-        // // std::cout<< "Distance: " << curDistance << std::endl;
-        if (curDistance < pointSize && curDistance < minDistance)
+        double currentDistance = this->getDistance(this->points[i], clickedPoint);
+
+        if (currentDistance < pointSize && currentDistance < minDistance)
         {
-            minDistance = curDistance;
+            minDistance = currentDistance;
             index = i;
         }
     }
@@ -369,51 +367,56 @@ void GraphicScene::removeIntersectingPoint(QPointF clickedPoint)
 
 double GraphicScene::getDistance(QPointF a, QPointF b)
 {
-    // std::cout<< "getDistance" << std::endl;
     return sqrt((a.x() - b.x()) * (a.x() - b.x()) + (a.y() - b.y()) * (a.y() - b.y()));
 }
 
-// points interactions
+
 
 void GraphicScene::addPoint(QPointF point)
 {
-    // std::cout<< "addPoint" << std::endl;
-    points.push_back(point);
-    this->update();
-    emit pointsUpdated();
+    if (isDuplicate(points, point) == false)
+    {
+        points.push_back(point);
+        this->update();
+        emit pointsUpdated();
+    }
 }
 
-std::vector<QPointF> GraphicScene::getPoints(void)
+QVector<QPointF> GraphicScene::getPoints(void)
 {
-    // std::cout<< "getPoints" << std::endl;
     return points;
 }
 
 void GraphicScene::removeAllPoints(void)
 {
-    // std::cout<< "removeAllPoints" << std::endl;
     points.clear();
+    showSolution = false;
+    this->update();
     emit pointsUpdated();
 }
 
 QStandardItemModel* GraphicScene::pointsModel(void)
 {
     if (!pointsModel_)
-        pointsModel_ = new QStandardItemModel(this);
+        pointsModel_ = new QStandardItemModel(points.size(), 2, this);
+
     return pointsModel_;
 }
 
 void GraphicScene::updatePointsModel(void)
 {
-    auto model = pointsModel();
+    auto model = pointsModel(); //QStandardItemModel
     model->clear();
+    model->setHorizontalHeaderLabels(QStringList() << "X" << "Y");
+
     for (const auto& point : points) {
-        auto item = new QStandardItem;
-        item->setData(QVariant::fromValue(point), Qt::DisplayRole);
-        auto index = model->index(model->rowCount(), 0);
-        model->setData(index, point.x(), Qt::EditRole);
-        model->setData(model->index(model->rowCount() - 1, 1), point.y(), Qt::EditRole);
-        model->appendRow(item);
+        QList<QStandardItem *> items;
+        QStandardItem *item_x = new QStandardItem(), *item_y = new QStandardItem();
+        item_x->setData(QVariant(point.x()), Qt::DisplayRole);
+        item_y->setData(QVariant(point.y()), Qt::DisplayRole);
+        items.append(item_x);
+        items.append(item_y);
+        model->appendRow(items);
     }
 }
 
@@ -428,3 +431,120 @@ void GraphicScene::zoomAtPercent(double zoom)
     this->zoomPercent = zoom;
     this->setPlane(topLeft, newSize.width(), newSize.height());
 }
+
+bool GraphicScene::isDuplicate(QVector<QPointF> points, QPointF point)
+{
+    for (int i = 0; i < points.size(); i++)
+    {
+        if (points[i].x() == point.x() && points[i].y() == point.y())
+            return true;
+    }
+    return false;
+}
+
+bool GraphicScene::isDegenerate(qreal a, qreal b, qreal c)
+{
+    return (a + b <= c || a + c <= b || b + c <= a);
+}
+
+int GraphicScene::solveProblem(void)
+{
+    if (points.size() < 3)
+        return 1;
+
+    QVector<QPointF> triangle;
+    QVector2D vecA, vecB, vecC;
+    QVector2D vecAK, vecBK, vecCK;
+    qreal a, b, c, ak, bk, ck, bMax, bMin = -1;
+    bool degen_flag = true;
+
+    triangle.push_back(points[0]);
+    triangle.push_back(points[1]);
+    triangle.push_back(points[2]);
+
+    for (int i = 0; i < points.size() - 2; i++)
+    {
+        triangle[0] = points[i];
+        for (int j = i + 1; j < points.size() - 1; j++)
+        {
+            triangle[1] = points[j];
+            for (int k = j + 1; k < points.size(); k++)
+            {
+                triangle[2] = points[k];
+
+                // if (degen_flag && !isDegenerate(triangle[0], triangle[1], triangle[2]))
+                //     degen_flag = false;
+
+                vecA = QVector2D(triangle[2] - triangle[1]);
+                vecB = QVector2D(triangle[2] - triangle[0]);
+                vecC = QVector2D(triangle[1] - triangle[0]);
+                a = vecA.length(), b = vecB.length(), c = vecC.length();
+
+                if (isDegenerate(a, b, c))
+                    continue;
+                degen_flag = false;
+
+                vecAK = vecC + vecA * c / (b + c);
+
+                vecC = -vecC;
+                vecB = -vecB;
+
+                vecBK = vecA + vecB * a / (c + a);
+
+                vecC = -vecC;
+                vecA = -vecA;
+
+                vecCK = vecB + vecC * b / (a + b);
+
+                // qDebug() << "vecAK length:" << vecAK.length();
+                // qDebug() << "vecBK length:" << vecBK.length();
+                // qDebug() << "vecCK length:" << vecCK.length();
+
+                ak = vecAK.length();
+                bk = vecBK.length();
+                ck = vecCK.length();
+
+                bMax = std::max({ak, bk, ck});
+
+                // qDebug() << "max vecXK length:" << bMax;
+
+                if (bMin == -1 || bMax < bMin)
+                {
+                    bMin = bMax;
+                    // qDebug() << "new Min" << bMin;
+                    res_triangle = triangle;
+                    if (bMax == ak)
+                    {
+                        bisectorPoint = triangle[0] + vecAK.toPointF();
+                        bisectorFrom = 0;
+                    }
+                    else if (bMax == bk)
+                    {
+                        bisectorPoint = triangle[1] + vecBK.toPointF();
+                        bisectorFrom = 1;
+                    }
+                    else
+                    {
+                        bisectorPoint = triangle[2] + vecCK.toPointF();
+                        bisectorFrom = 2;
+                    }
+                }
+            }
+        }
+    }
+
+    if (degen_flag)
+        return 2;
+
+    return 0;
+}
+
+void GraphicScene::resetZoom(void)
+{
+    this->setGraphicsWindow(this->originalGraphicsWindow);
+    this->setPlane(this->originalGraphicsWindow);
+    this->zoomPercent = 100;
+}
+
+
+

@@ -7,6 +7,8 @@
 #include <QPainter>
 #include <QObject>
 #include <math.h>
+#include <QDebug>
+#include <QVector2D>
 
 class GraphicScene : public QGraphicsScene
 {
@@ -14,20 +16,21 @@ class GraphicScene : public QGraphicsScene
 public:
     explicit GraphicScene(double x, double y, double w, double h, bool state, QObject *parent = nullptr);
 
-    // visibility properties
+    // grid properties
     void setGridVisibility(bool value);
     bool gridIsVisible(void);
 
     // point properties
     void addPoint(QPointF point);
-    std::vector<QPointF> getPoints(void);
+    QVector<QPointF> getPoints(void);
     void removeAllPoints(void);
 
     // model for the points table
     QStandardItemModel* pointsModel(void);
 
-    // plane coordinates properties
+    // plane and coord properties
     void setPlane(double x, double y, double w, double h, bool update = true);
+    void setPlane(QRectF rect, bool update = true);
     void setPlane(QPointF topLeft, double w, double h, bool update = true);
     QRectF getPlane(void);
 
@@ -36,17 +39,22 @@ public:
     void setGraphicsWindow(QRectF rect);
     QRectF getGraphicsWindow(void);
 
-    // coefficient properties
-    void setCX(double c);
-    void setCY(double c);
+    // coefficients
     double getCX(void);
     double getCY(void);
+    void setCX(double c);
+    void setCY(double c);
 
     QPointF toPlaneCoords(QPointF windowCoords);
     QPointF toWindowCoords(QPointF planeCoords);
 
     // zoom properties
     void zoomAtPercent(double zoom);
+
+    //solution
+    bool isDegenerate(qreal a, qreal b, qreal c);
+    int solveProblem(void);
+    bool showSolution = false;
 
 signals:
     void zoomChanged(double value);
@@ -62,16 +70,19 @@ protected:
     virtual void wheelEvent(QGraphicsSceneWheelEvent *wheelEvent) override;
 
     // attributes
-    QRectF plane, graphicsWindow;
-    std::vector<QPointF> points;
+    QRectF plane, graphicsWindow, originalGraphicsWindow;
+    QVector<QPointF> points;
+    QVector<QPointF> res_triangle;
     bool gridVisible;
     double cX, cY;
     QPointF dragStartPos;
     bool isDragged = false;
     QSizeF originalSize;
     double zoomPercent;
+    QPointF bisectorPoint;
+    int bisectorFrom;
 
-    // for points table
+    // for pointsView
     mutable QStandardItemModel* pointsModel_ = nullptr;
 
     // methods
@@ -81,12 +92,16 @@ protected:
     void drawYAxis(QPainter *painter);
     void drawCenter(QPainter *painter);
     void drawPoint(QPainter *painter, QPointF point, double k);
+    void drawPointConnections(QPainter *painter, QVector<QPointF> pointsToConnect);
     void removeIntersectingPoint(QPointF point);
 
     double getDistance(QPointF a, QPointF b);
 
+    bool isDuplicate(QVector<QPointF> points, QPointF point);
+
 public slots:
     void updatePointsModel(void);
+    void resetZoom(void);
 };
 
 #endif // GRAPHICSCENE_H
