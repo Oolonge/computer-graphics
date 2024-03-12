@@ -51,17 +51,6 @@ public:
     // zoom properties
     void zoomAtPercent(double zoom);
 
-    //solution, for "algorithm.h/.cpp"
-    bool isDegenerate(qreal a, qreal b, qreal c);
-    void initTriangle(QVector<QPointF> &triangle);
-    void calculateVectors(const QVector<QPointF> &triangle,
-            QVector2D &vecA, QVector2D &vecB, QVector2D &vecC,
-                qreal &a, qreal &b, qreal &c);
-    void compareMins(const QVector<QPointF> &triangle,
-            const QVector2D &vecAK, const QVector2D &vecBK, const QVector2D &vecCK,
-                qreal &bMin, qreal &bMax, const qreal ak, const qreal bk);
-    int solveProblem(void);
-
     bool showSolution = false;
 
 signals:
@@ -108,7 +97,21 @@ protected:
     bool isDuplicate(QVector<QPointF> points, QPointF point);
 
 public slots:
+
+    //solution, for "algorithm.h/.cpp"
+    bool isDegenerate(qreal a, qreal b, qreal c);
+    void initTriangle(QVector<QPointF> &triangle);
+    void calculateVectors(const QVector<QPointF> &triangle,
+                          QVector2D &vecA, QVector2D &vecB, QVector2D &vecC,
+                          qreal &a, qreal &b, qreal &c);
+    void compareMins(const QVector<QPointF> &triangle,
+                     const QVector2D &vecAK, const QVector2D &vecBK, const QVector2D &vecCK,
+                     qreal &bMin, qreal &bMax, const qreal ak, const qreal bk);
+    int solveProblem(void);
+    //ends here
+
     void updatePointsModel(void);
+
     void resetZoom(void);
 };
 

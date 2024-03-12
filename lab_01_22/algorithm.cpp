@@ -79,7 +79,11 @@ int GraphicScene::solveProblem(void)
                 calculateVectors(triangle, vecA, vecB, vecC, a, b, c);
 
                 if (isDegenerate(a, b, c))
+                {
+                    qDebug() << "true, continue...";
                     continue;
+                }
+
                 degen_flag = false;
 
                 vecAK = vecC + vecA * c / (b + c);
