@@ -10,6 +10,9 @@
 #include <QDebug>
 #include <QVector2D>
 
+#define MAX_ZOOM_PERCENT 1500
+#define MIN_ZOOM_PERCENT 1
+
 class GraphicScene : public QGraphicsScene
 {
     Q_OBJECT

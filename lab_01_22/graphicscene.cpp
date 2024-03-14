@@ -312,7 +312,7 @@ void GraphicScene::wheelEvent(QGraphicsSceneWheelEvent *wheelEvent)
     QPointF cursorPos = wheelEvent->scenePos();
 
     double zoom = 1 - delta / this->graphicsWindow.width();
-    if ((this->zoomPercent / zoom < 1) || (this->zoomPercent / zoom > 1000))
+    if ((this->zoomPercent / zoom < MIN_ZOOM_PERCENT) || (this->zoomPercent / zoom > MAX_ZOOM_PERCENT))
         return;
 
     double xRatio = (cursorPos.x() - this->graphicsWindow.left()) / this->graphicsWindow.width();
