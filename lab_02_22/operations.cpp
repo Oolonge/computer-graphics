@@ -80,21 +80,6 @@ void y_turn_point(point& dot, double angle)
     dot.y = dot.y * cos_ang + x_copy * sin_ang;
 }
 
-// void z_turn_point(point& dot, double angle)
-// {
-//     if (angle == 0)
-//         return;
-
-//     double cos_ang = d_cos(angle);
-//     double sin_ang = d_sin(angle);
-
-//     double x_copy = dot.x;
-
-//     dot.x = dot.x * cos_ang + dot.y * sin_ang;
-//     dot.y = -x_copy * sin_ang + dot.y * cos_ang;
-// }
-
-
 int turn_points_array(point* pts, int n, turn angle)
 {
     if(!pts)

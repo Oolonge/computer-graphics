@@ -76,7 +76,7 @@ int process_connections(connections_data& connections, FILE* f)
     int err = read_amount(&n, f);
     if (err)
         return err;
-    qDebug() << "amout of connections read:" << n;
+    // qDebug() << "amout of connections read:" << n;
     err = connections_alloc(connections, n);
     if (err)
         return err;

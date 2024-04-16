@@ -50,7 +50,7 @@ void add_astroid_points(point *dots, int idx)
         t = i * M_PI / (ASTR_PTS_AMOUNT + idx - 1);
         tmp_x = pow(cos(t), 3);
         tmp_y = pow(sin(t), 3);
-        qDebug() << i << ":" << tmp_x << tmp_y;
+        // qDebug() << i << ":" << tmp_x << tmp_y;
         dots[i] = { .x = tmp_x, .y = tmp_y};
         dots[i + ASTR_PTS_AMOUNT] = {.x = -tmp_x, .y = -tmp_y};
     }

@@ -1,7 +1,7 @@
 #include "algorithms.h"
 #include <cmath>
 
-static int sign(double x)
+int sign(double x)
 {
     if (x < 0)
         return -1;

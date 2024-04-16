@@ -4,6 +4,7 @@
 #include "consts.h"
 #include "mainwindow.h"
 
+int sign(double x);
 void standart_line(line_t &line, graphics_t scene);
 int dda_line(line_t &line, graphics_t scene, bool drawingFlag, bool countStepsFlag);
 int bresen_double_line(line_t &line, graphics_t scene, bool drawingFlag, bool countStepsFlag);
