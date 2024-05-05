@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 12.0.82, 2024-03-14T22:46:44. -->
+<!-- Written by QtCreator 12.0.82, 2024-05-04T19:24:08. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -70,8 +70,8 @@
     <value type="bool" key="AutoTest.Framework.QtTest">true</value>
    </valuemap>
    <valuemap type="QVariantMap" key="AutoTest.CheckStates">
-    <value type="Qt::CheckState" key="1@/Users/administrator/Desktop/qt/C++/lab_01_22/test_graphicscene.h:cleanupTestCase">Unchecked</value>
-    <value type="Qt::CheckState" key="1@/Users/administrator/Desktop/qt/C++/lab_01_22/test_graphicscene.h:initTestCase">Unchecked</value>
+    <value type="Qt::CheckState" key="1@/Users/administrator/Desktop/qt/C++/lab_01_22/unit_tests/test_graphicscene.h:cleanupTestCase">Unchecked</value>
+    <value type="Qt::CheckState" key="1@/Users/administrator/Desktop/qt/C++/lab_01_22/unit_tests/test_graphicscene.h:initTestCase">Unchecked</value>
    </valuemap>
    <value type="int" key="AutoTest.RunAfterBuild">0</value>
    <value type="bool" key="AutoTest.UseGlobal">true</value>
@@ -253,7 +253,7 @@
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/administrator/Desktop/qt/C++/lab_01/build/Desktop_arm_darwin_generic_mach_o_64bit-Debug/lab_01.app/Contents/MacOS</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/administrator/Desktop/qt/C++/lab_01/build/Desktop_arm_darwin_generic_mach_o_64bit-Debug/out/</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

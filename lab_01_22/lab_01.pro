@@ -1,37 +1,44 @@
-QT       += core gui
+QT += core gui testlib widgets
+CONFIG += c++20 testcase
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets testlib gui
-
-CONFIG += c++17
+CONFIG -= app_bundle #creates test.exe instead of test.exe.app
+TARGET = release.exe
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
-DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+# DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    aboutpopup.cpp \
-    algorithm.cpp \
-    graphicscene.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    solutionpopup.cpp \
-    taskpopup.cpp \
-    test_graphicscene.cpp
+    src/main.cpp \
+    # unit_tests/unit_main.cpp \
+    # unit_tests/test_graphicscene.cpp \
+    src/aboutpopup.cpp \
+    src/algorithm.cpp \
+    src/graphicscene.cpp \
+    src/mainwindow.cpp \
+    src/solutionpopup.cpp \
+    src/taskpopup.cpp
 
 HEADERS += \
-    aboutpopup.h \
-    algorithm.h \
-    graphicscene.h \
-    mainwindow.h \
-    solutionpopup.h \
-    taskpopup.h \
-    test_graphicscene.h
+    inc/aboutpopup.h \
+    inc/algorithm.h \
+    inc/graphicscene.h \
+    inc/mainwindow.h \
+    inc/solutionpopup.h \
+    inc/taskpopup.h \
+    # unit_tests/test_graphicscene.h
 
 FORMS += \
-    aboutpopup.ui \
-    mainwindow.ui \
-    solutionpopup.ui \
-    taskpopup.ui
+    forms/aboutpopup.ui \
+    forms/mainwindow.ui \
+    forms/solutionpopup.ui \
+    forms/taskpopup.ui
+
+INCLUDEPATH += inc/
+OBJECTS_DIR = build/obj
+MOC_DIR = build/moc
+UI_DIR = build/ui
+DESTDIR = out/
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
