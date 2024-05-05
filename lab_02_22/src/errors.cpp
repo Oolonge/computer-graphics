@@ -1,4 +1,4 @@
-#include "errors.h"
+#include "../inc/errors.h"
 #include "QMessageBox"
 #include <QObject>
 

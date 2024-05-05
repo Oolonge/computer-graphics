@@ -1,6 +1,6 @@
-#include "drawing.h"
-#include "graphics.h"
-#include "qdebug.h"
+#include "../inc/drawing.h"
+#include "../inc/graphics.h"
+#include <qdebug.h>
 
 coord_point get_dot(point* dots, int n)
 {

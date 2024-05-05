@@ -1,5 +1,5 @@
-#include "graphics.h"
-#include "errors.h"
+#include "../inc/graphics.h"
+#include "../inc/errors.h"
 
 int init_graph(graphics &a, QGraphicsView *gV)
 {

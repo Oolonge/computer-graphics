@@ -1,9 +1,9 @@
 #include "cstdio"
 #include <cstdlib>
-#include "io.h"
-#include "projection.h"
-#include "errors.h"
-#include "qdebug.h"
+#include "../inc/io.h"
+#include "../inc/projection.h"
+#include "../inc/errors.h"
+#include <qdebug.h>
 
 int read_amount(int* n, FILE* f)
 {
