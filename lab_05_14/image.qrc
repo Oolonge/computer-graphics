@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/dot.png</file>
+        <file>icons/scale.png</file>
+        <file>icons/drag.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>926</width>
+    <height>722</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Лабораторная работа №5</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGraphicsView" name="graphicsView">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>30</y>
+      <width>620</width>
+      <height>620</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>70</y>
+      <width>241</width>
+      <height>86</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QPushButton" name="pushButton_line_color">
+         <property name="text">
+          <string>Выбрать цвет линии</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_lc">
+         <property name="minimumSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="sizeIncrement">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QPushButton" name="pushButton_fill_color">
+         <property name="text">
+          <string>Выбрать цвет заливки</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_fc">
+         <property name="minimumSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>160</y>
+      <width>241</width>
+      <height>55</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Отображение:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox">
+       <item>
+        <property name="text">
+         <string>Без задержки</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>С задержкой</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>210</y>
+      <width>241</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Задержка</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinBox"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>мс</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>240</y>
+      <width>240</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>240</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>50</number>
+    </attribute>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>60</number>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="pushButton_del_point">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>500</y>
+      <width>121</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Удалить точку</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_close">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>530</y>
+      <width>241</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Замкнуть</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_add_hole">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>560</y>
+      <width>241</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Добавить отверстие</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_fill">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>590</y>
+      <width>241</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Залить</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_clear">
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>500</y>
+      <width>111</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Удалить всё</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_cancel">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>620</y>
+      <width>241</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Отмена</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>30</y>
+      <width>241</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton_reset_scale">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/scale.png</normaloff>icons/scale.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_cursor_mode">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/dot.png</normaloff>icons/dot.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_drag_mode">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/drag.png</normaloff>icons/drag.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>926</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Меню</string>
+    </property>
+    <addaction name="author_info_action"/>
+    <addaction name="program_info_action"/>
+    <addaction name="exit_action"/>
+   </widget>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="author_info_action">
+   <property name="text">
+    <string>Об авторе</string>
+   </property>
+  </action>
+  <action name="program_info_action">
+   <property name="text">
+    <string>О программе</string>
+   </property>
+  </action>
+  <action name="exit_action">
+   <property name="text">
+    <string>Выйти</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
