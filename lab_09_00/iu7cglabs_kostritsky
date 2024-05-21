@@ -1,0 +1,44 @@
+OUT_FOLDER := out
+EXECUTABLE_NAME := release
+UNIT_NAME := unit_tests
+COPY := cp
+
+PHONY: run clean release format checkall unit saveolds report-functesting-latest.txt report-unittesting-latest.txt
+
+clean:
+	rm -rf $(OUT_FOLDER)/$(EXECUTABLE_NAME).exe
+	rm -rf $(OUT_FOLDER)/$(UNIT_NAME).exe
+	rm -f default.profraw default.profdata
+	if [ -f Makefile ]; then \
+    	make clean; \
+		rm Makefile; \
+	fi
+
+release: lab_09.pro
+	qmake lab_09.pro
+	make
+
+run: release
+	./$(OUT_FOLDER)/$(EXECUTABLE_NAME).exe
+
+format: 
+	clang-format -style=file -i src/*.cpp inc/*.cpp unit_tests/*.cpp #*.{cpp,h}
+
+checkall:
+	@lizard > lizard.txt
+	@cppcheck . --enable=all --library=qt &> cppcheck.txt
+	$(info Created files: lizard.txt, cppcheck.txt)
+
+unit: unit_tests.pro
+	qmake unit_tests.pro
+	make
+
+report-unittesting-latest.txt: unit
+	./coverage.sh > report-unittesting-latest.txt
+
+report-functesting-latest.txt:
+	echo "Coverage: 0.00%" > report-functesting-latest.txt #not implemented yet
+
+saveolds:
+	@[ -f ./report-unittesting-latest.txt ] && cp report-unittesting-latest.txt report-unittesting-old.txt || true
+	@[ -f ./report-functesting-latest.txt ] && cp report-functesting-latest.txt report-functesting-old.txt || true
