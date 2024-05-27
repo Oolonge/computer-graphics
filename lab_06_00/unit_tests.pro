@@ -29,7 +29,9 @@ SOURCES += \
     src/menu.cpp \
     src/requests.cpp \
     src/table.cpp \
-    src/table_widget.cpp
+    src/table_widget.cpp \
+    func_data/test.cpp \
+    func_data/testparser.cpp \
 
 HEADERS += \
     unit_tests/unit_fill.h \
@@ -38,7 +40,9 @@ HEADERS += \
     inc/mainwindow.h \
     inc/requests.h \
     inc/structures.h \
-    inc/table.h
+    inc/table.h \
+    func_data/test.h \
+    func_data/testparser.h \
 
 FORMS += \
     forms/mainwindow.ui
