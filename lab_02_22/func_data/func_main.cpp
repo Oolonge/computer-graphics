@@ -21,7 +21,7 @@ void createNewWindow(MainWindow *w, const QList<Test> &tests, qsizetype &cur) {
     {
         qDebug() << "***** КОНЕЦ ФУНКЦИОНАЛЬНОГО ТЕСТИРОВАНИЯ *****";
         qDebug() << "Тестов пройдено:" << tests.count()
-                 << "| результаты находятся в папке ./func/";
+                 << "| результаты находятся в папке ./func/pics/";
         QCoreApplication::quit();
     }
 }
