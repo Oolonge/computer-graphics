@@ -3,6 +3,7 @@
 
 #include <QTest>
 #include "algorithms.h"
+#include "../func_data/test.h"
 
 class TestAlgorithms : public QObject
 {

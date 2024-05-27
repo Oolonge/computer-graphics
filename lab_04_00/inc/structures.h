@@ -24,11 +24,11 @@ enum figure_type_t
 
 struct figure_t
 {
-    QPoint center;
+    algorithm_t algorithm;
     figure_type_t type;
+    QPoint center;
     double ra;
     double rb;
-    algorithm_t algorithm;
     QColor color;
 };
 

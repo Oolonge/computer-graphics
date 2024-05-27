@@ -36,6 +36,46 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
 }
 
+MainWindow::MainWindow(Test test, QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+    scene = new QGraphicsScene(this);
+    ui->graphicsView->setScene(scene);
+    ui->graphicsView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+    ui->graphicsView->viewport()->installEventFilter(this);
+
+    if (!test.isEmpty())
+    {
+        this->populateTestData(test);
+    }
+}
+
+void MainWindow::populateTestData(Test test)
+{
+    if (!test.is_full())
+        return;
+
+    drawing_axes(scene);
+    figure_t figure = test.figure();
+    drawEllipse(scene, figure, true);
+
+    QRectF sceneRect = scene->sceneRect();
+    QSize imageSize(sceneRect.size().toSize());
+    QImage image(imageSize, QImage::Format_ARGB32);
+    image.fill(Qt::white);
+
+    QPainter painter(&image);
+    scene->render(&painter);
+    QString filename = QString("/Users/administrator/Desktop/qt/C++/lab_04_00/func_data/pics/%1.png").arg(test.name());
+    image.save(filename, "png");
+
+    this->deleteLater();
+}
+
+
 MainWindow::~MainWindow()
 {
     delete ui;

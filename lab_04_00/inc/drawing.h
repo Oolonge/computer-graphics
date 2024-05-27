@@ -10,5 +10,6 @@ void drawCircleSpectrum(canvas_t &scene, const spectrum_t &spectrum);
 void drawElipseSpectrum(canvas_t &scene, const spectrum_t &spectrum);
 void drawCircleReflect(canvas_t &scene, const QPointF &point, const QPointF &center, const QColor &color);
 void drawEllipseReflect(canvas_t &scene, const QPointF &point, const QPointF &center, const QColor &color);
+void drawing_axes(canvas_t &scene);
 
 #endif // DRAWING_H

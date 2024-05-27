@@ -27,7 +27,9 @@ SOURCES += \
     src/drawing.cpp \
     src/mainwindow.cpp \
     src/request_handler.cpp \
-    src/structures.cpp
+    src/structures.cpp \
+    func_data/test.cpp \
+    func_data/testparser.cpp \
 
 HEADERS += \
     unit_tests/test_algorithms.h \
@@ -35,7 +37,9 @@ HEADERS += \
     inc/drawing.h \
     inc/mainwindow.h \
     inc/request_handler.h \
-    inc/structures.h
+    inc/structures.h \
+    func_data/test.h \
+    func_data/testparser.h \
 
 FORMS += \
     forms/mainwindow.ui
