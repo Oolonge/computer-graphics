@@ -29,7 +29,9 @@ SOURCES += \
     src/operations.cpp \
     src/projection.cpp \
     src/task_performer.cpp \
-    src/volumetric_point.cpp
+    src/volumetric_point.cpp \
+    func_data/test.cpp \
+    func_data/testparser.cpp
 
 HEADERS += \
     unit_tests/unit_tests.h \
@@ -41,7 +43,9 @@ HEADERS += \
     inc/operations.h \
     inc/projection.h \
     inc/task_performer.h \
-    inc/volumetric_point.h
+    inc/volumetric_point.h \
+    func_data/test.h \
+    func_data/testparser.h
 
 FORMS += \
     forms/mainwindow.ui

@@ -3,7 +3,7 @@
 #include "task_performer.h"
 #include "errors.h"
 #include "operations.h"
-
+#include "projection.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,9 +16,95 @@ MainWindow::MainWindow(QWidget *parent) :
     task_performer(req);
 }
 
+MainWindow::MainWindow(Test test, QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    request req;
+    req.t = INIT;
+    task_performer(req);
+
+    if (!test.isEmpty()) {
+        this->populateTestData(test);
+    }
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::populateTestData(Test test)
+{
+    on_actionOpen_triggered();
+
+    request req;
+    if (test.is_scale_)
+    {
+        req.t = SCALE;
+        req.sc = test.get_scale();
+
+        errors err = transform_and_show(req, ui);
+        if (err)
+            error_message(err);
+    }
+
+    if (test.is_turn_)
+    {
+        req.t = TURN;
+        req.tu = test.get_turn();
+
+        errors err = transform_and_show(req, ui);
+        if (err)
+            error_message(err);
+    }
+
+    if (test.is_move_)
+    {
+        req.t = MOVE;
+        req.mo = test.get_move();
+
+        errors err = transform_and_show(req, ui);
+        if (err)
+            error_message(err);
+    }
+
+    // draw dr;
+
+    // dr.gV = ui->graphicsView;
+    // dr.h = ui->graphicsView->height();
+    // dr.w = ui->graphicsView->width();
+
+    // graphics a;
+    // a.scene = new QGraphicsScene(dr.gV);
+    // if (!a.scene)
+    //     return PTR_ALLOC_ERR;
+    // a.pen = QPen(Qt::black);
+
+    // draw_connections(fig.points, fig.connections, dr, a);
+
+    // a.scene->setSceneRect(QRectF(QPointF(0, 0), QSizeF(dr.w, dr.h)));
+    // set_scene(dr.gV, a);
+
+    // QImage image((ui->graphicsView->rect()).size(), QImage::Format_ARGB32);
+    // image.fill(Qt::transparent);
+
+    // errors err = transform_and_show(req, ui);
+    // if (err)
+    //     error_message(err);
+
+    // QPainter painter(&image);
+    // scene->render(&painter);
+
+    // draw_action(ui, &image);
+
+    // image.mirror();
+    // QString filename = QCoreApplication::applicationDirPath() + "/" + QString("../func/%1.png").arg(test.name());
+    // image.save(filename, "png");
+
+    this->deleteLater();
 }
 
 errors draw_action(Ui::MainWindow* ui)

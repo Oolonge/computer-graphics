@@ -85,6 +85,11 @@ int draw_figure(projection fig, draw arg)
 
     draw_connections(fig.points, fig.connections, arg, a);
 
+    // added
+    // QPixmap pixmap = QPixmap::fromImage(*arg.img);
+    // QPainter painter(&pixmap);
+    // a.scene->render(&painter);
+
     a.scene->setSceneRect(QRectF(QPointF(0, 0), QSizeF(arg.w, arg.h)));
     set_scene(arg.gV, a);
 

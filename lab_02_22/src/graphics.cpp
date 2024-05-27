@@ -4,6 +4,7 @@
 int init_graph(graphics &a, QGraphicsView *gV)
 {
     a.scene = new QGraphicsScene(gV);
+
     if (!a.scene)
         return PTR_ALLOC_ERR;
 

@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Test 0",
+        "desc": "Исходное изображение",
+        "filename": "/Users/administrator/Desktop/qt/C++/lab_02_22/cube.txt",
+        "actions": []
+    },
+    {
+        "name": "Test 1",
+        "desc": "Описание теста",
+        "filename": "/Users/administrator/Desktop/qt/C++/lab_02_22/cube.txt",
+        "actions": [
+            {
+                "type": "turn",
+                "oy": 90,
+                "ox": 0
+            },
+            {
+                "type": "scale",
+                "kx": 1.5,
+                "ky": 1
+            },
+            {
+                "type": "move",
+                "dx" : 10,
+                "dy": 0
+            }
+        ]
+    }
+]
