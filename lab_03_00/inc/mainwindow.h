@@ -21,6 +21,7 @@
 #include "algorithms.h"
 #include "consts.h"
 #include "ui_mainwindow.h"
+#include "../func_data/test.h"
 
 namespace Ui { class MainWindow; }
 
@@ -30,6 +31,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(Test test, QWidget *parent = nullptr);
     ~MainWindow();
 
     int drawLine(line_t &line, bool is_drawing, bool is_cnt_steps);
@@ -38,6 +40,7 @@ public:
     double MeasureAverageTime(spectre_t spectrum);
     void MeasureSteps(spectre_t spectrum, std::vector<int> &steps);
 
+    void populateTestData(Test test);
 public slots:
     //overrides
     virtual bool eventFilter(QObject *object, QEvent *event) override;

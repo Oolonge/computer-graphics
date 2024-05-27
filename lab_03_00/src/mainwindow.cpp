@@ -9,9 +9,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
-    // ui->graphicsView->scale(1, -1); //coversion to normal coordinates
     ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing, false); //turn off built-in antialiasing
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     ui->pushButtonCancel->setEnabled(false);
 
@@ -23,6 +23,34 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag); //dragging
 }
 
+MainWindow::MainWindow(Test test, QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    scene = new QGraphicsScene();
+    ui->graphicsView->setScene(scene);
+    ui->graphicsView->scale(1, -1); //coversion to normal coordinates
+    ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing, false); //turn off built-in antialiasing
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    ui->pushButtonCancel->setEnabled(false);
+
+    data.backgroundColor = Qt::white;
+    displayColor(data.backgroundColor, ui->label_bc);
+    displayColor(line_color, ui->label_lc);
+
+    ui->graphicsView->viewport()->installEventFilter(this);
+    ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag); //dragging
+
+    if (!test.isEmpty())
+    {
+        this->populateTestData(test);
+    }
+}
+
 MainWindow::~MainWindow()
 {
     delete scene;
@@ -30,8 +58,29 @@ MainWindow::~MainWindow()
     cancel_stack = std::stack <objects_t>();
 }
 
-//overrides
+void MainWindow::populateTestData(Test test)
+{
+    if (!test.is_full())
+        return;
+    drawAxes();
+    line_t line = test.line();
+    drawLine(line, true, false);
 
+    QRectF sceneRect = scene->sceneRect();
+    QSize imageSize(sceneRect.size().toSize());
+    QImage image(imageSize, QImage::Format_ARGB32);
+    image.fill(Qt::white);
+
+    QPainter painter(&image);
+    scene->render(&painter);
+    QString filename = QString("/Users/administrator/Desktop/qt/C++/lab_03_00/func_data/pics/%1.png").arg(test.name());
+    image.save(filename, "png");
+
+    this->deleteLater();
+}
+
+
+//overrides
 void MainWindow::showEvent(QShowEvent *ev)
 {
     QMainWindow::showEvent(ev);
