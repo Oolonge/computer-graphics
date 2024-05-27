@@ -5,7 +5,6 @@
 #include <QMessageBox>
 #include <QWheelEvent>
 #include <iostream>
-//#include "drawing.h"
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -54,11 +53,104 @@ MainWindow::MainWindow(QWidget* parent)
     ui->pushButton_drag_mode->setToolTip("Режим масштабирования");
 }
 
+MainWindow::MainWindow(Test test, QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+    scene = new QGraphicsScene(this);
+    ui->graphicsView->setScene(scene);
+    // ui->graphicsView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->viewport()->installEventFilter(this);
+
+    ui->graphicsView->setBackgroundBrush(back_color);
+
+    data.n_figures = 0;
+    data.n_holes = -1;
+
+    figure f;
+    f.fill_color = fill_color;
+    f.line_color = line_color;
+    f.closed_figure_flag = false;
+    data.figures.push_back(f);
+    data.back_color = back_color;
+    data.figures[data.n_figures].line_color = line_color;
+    data.figures[data.n_figures].fill_color = fill_color;
+
+    if (!test.isEmpty())
+    {
+        this->populateTestData(test);
+    }
+}
+
+
 MainWindow::~MainWindow()
 {
     delete ui;
     delete scene;
     cancel = std::stack<content>();
+}
+
+// func tests
+void MainWindow::populateTestData(Test test)
+{
+    // qDebug() << "populateTestData called";
+    // if (!test.is_full())
+    //     return;
+    // qDebug() << "before cycle";
+    for (point pnt : test.point_vector())
+    {
+        // qDebug() << "x: " << pnt.x << " " << "y: " << pnt.y;
+        addPointNoClick(pnt);
+    }
+
+    on_pushButton_close_clicked();
+    fill_color = test.fill_color();
+    on_pushButton_fill_clicked();
+
+    QRectF sceneRect = scene->sceneRect();
+    QSize imageSize(sceneRect.size().toSize());
+    QImage image(imageSize, QImage::Format_ARGB32);
+    image.fill(Qt::white);
+
+    QPainter painter(&image);
+    scene->render(&painter);
+    QString filename = QString("/Users/administrator/Desktop/qt/C++/lab_05_14/func_data/pics/%1.png").arg(test.name());
+    image.save(filename, "png");
+
+    this->deleteLater();
+}
+
+void MainWindow::addPointNoClick(point p)
+{
+    request req;
+    req.data = data;
+    req.colors_data = { line_color, fill_color };
+    req.hole_figure_flag = hole_flag;
+    req.p = p;
+    req.scene = scene;
+    req.table = ui->tableWidget;
+    req.view = ui->graphicsView;
+    req.oper = ADD_POINT;
+    if (!hand_flag) {
+        int rc = handle_request(req);
+        if (rc == 1)
+            error_message("Такая точка уже введена");
+        else if (rc == 2)
+            error_message("Точка отверстия находится вне фигуры");
+        else if (rc == 0) {
+            content* c = new content;
+            copy(&c, &data);
+            cancel.push(*c);
+            ui->pushButton_cancel->setEnabled(true);
+            data = req.data;
+            req.oper = DRAW;
+            req.hole_figure_flag = false;
+            handle_request(req);
+        }
+    }
 }
 
 //overrides
@@ -81,6 +173,8 @@ bool MainWindow::eventFilter(QObject* object, QEvent* event)
     }
     return false;
 }
+
+
 
 void MainWindow::mousePressEvent(QMouseEvent* event)
 {

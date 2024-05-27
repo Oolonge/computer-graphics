@@ -7,6 +7,7 @@
 #include <stack>
 #include <QTableWidgetItem>
 #include "structures.h"
+#include "../func_data/test.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,6 +19,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(Test test, QWidget *parent = nullptr);
     ~MainWindow();
 
     // overrides
@@ -28,6 +30,9 @@ public:
     void error_message(QString str);
     void copy(struct content** a, struct content* b);
 
+    //func testing
+    void populateTestData(Test test);
+    void addPointNoClick(point p);
 private slots:
     // implemented in color.cpp
     void on_pushButton_line_color_clicked();

@@ -2,7 +2,7 @@ QT += core gui testlib widgets
 CONFIG += c++20 testcase
 
 CONFIG -= app_bundle #creates test.exe instead of test.exe.app
-TARGET = release.exe
+TARGET = func_tests.exe
 
 QMAKE_CXXFLAGS += -g -fprofile-instr-generate -fcoverage-mapping -O0
 QMAKE_LFLAGS += -fprofile-instr-generate
@@ -18,7 +18,7 @@ DESTDIR = out/
 # DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/main.cpp \
+    # src/main.cpp \
     src/buttons.cpp \
     src/color.cpp \
     src/drawing.cpp \
@@ -29,19 +29,19 @@ SOURCES += \
     src/table_widget.cpp \
     func_data/test.cpp \
     func_data/testparser.cpp \
-    # src/unit_fill.cpp \
-    # src/unit_main.cpp
+    func_data/func_main.cpp \
+    # src/main.cpp \
+    # unit_tests.cpp \
 
 HEADERS += \
+    func_data/test.h \
+    func_data/testparser.h \
     inc/drawing.h \
     inc/fill.h \
     inc/mainwindow.h \
     inc/requests.h \
     inc/structures.h \
     inc/table.h \
-    func_data/test.h \
-    func_data/testparser.h \
-    # unit_fill.h
 
 FORMS += \
     forms/mainwindow.ui
