@@ -4,6 +4,9 @@ CONFIG += c++20 testcase
 CONFIG -= app_bundle #creates test.exe instead of test.exe.app
 TARGET = release.exe
 
+QMAKE_CXXFLAGS += -g -fprofile-instr-generate -fcoverage-mapping -O0
+QMAKE_LFLAGS += -fprofile-instr-generate
+
 INCLUDEPATH += inc/
 OBJECTS_DIR = build/obj
 MOC_DIR = build/moc
@@ -24,6 +27,8 @@ SOURCES += \
     src/mainwindow.cpp \
     src/menu.cpp \
     src/requests.cpp \
+    func_data/test.cpp \
+    func_data/testparser.cpp \
     # unit_tests/unit_figure.cpp \
     # unit_tests/unit_main.cpp
 
@@ -34,6 +39,8 @@ HEADERS += \
     inc/mainwindow.h \
     inc/requests.h \
     inc/structures.h \
+    func_data/test.h \
+    func_data/testparser.h \
     # unit_tests/unit_figure.h
 
 FORMS += \

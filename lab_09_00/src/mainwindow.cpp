@@ -45,6 +45,112 @@ MainWindow::MainWindow(QWidget* parent)
     ui->pushButton_hand_mode->setToolTip("Режим масштабирования.");
 }
 
+MainWindow::MainWindow(Test test, QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    // initial colors
+    data.cut_color = Qt::blue;
+    data.line_color = Qt::black;
+    data.visible_color = QColor("#FF0000");
+
+    scene = new QGraphicsScene(this);
+    ui->graphicsView->setScene(scene);
+    ui->graphicsView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->viewport()->installEventFilter(this);
+
+    ui->radioButton_cut->setChecked(cut_flag);
+    ui->pushButton_cancel->setEnabled(false);
+
+    ui->graphicsView->setMouseTracking(true);
+    ui->pushButton_hand_mode->setEnabled(true);
+    ui->pushButton_cursor_mode->setEnabled(false);
+    hand_flag = false;
+
+    if (!test.isEmpty())
+    {
+        this->populateTestData(test);
+    }
+}
+
+void MainWindow::populateTestData(Test test)
+{
+    if (!test.is_full())
+        return;
+
+    for (point pnt : test.cutter())
+    {
+        addPointNoClick(pnt, true);
+    }
+
+    myHandleClick(true);
+
+    for (point pnt : test.figure())
+    {
+        addPointNoClick(pnt, false);
+    }
+
+    myHandleClick(false);
+    on_pushButton_cut_clicked();
+
+    QRectF sceneRect = scene->sceneRect();
+    QSize imageSize(sceneRect.size().toSize());
+    QImage image(imageSize, QImage::Format_ARGB32);
+    image.fill(Qt::white);
+
+    QPainter painter(&image);
+    scene->render(&painter);
+    QString filename = QString("/Users/administrator/Desktop/qt/C++/lab_09_00/func_data/pics/%1.png").arg(test.name());
+    image.save(filename, "png");
+
+    this->deleteLater();
+}
+
+void MainWindow::myHandleClick(bool my_cut_flag)
+{
+    push_cancel();
+    process_flag = false;
+    if (my_cut_flag) {
+        data.cutter.is_close = true;
+        data.cutter.update_lines(data.cutter.points[0]);
+    } else {
+        data.figure.is_close = true;
+        data.figure.update_lines(data.figure.points[0]);
+    }
+    request req;
+    req.data = data;
+    req.scene = scene;
+    req.view = ui->graphicsView;
+    req.operation = DRAW_ALL;
+    request_handle(req);
+}
+
+void MainWindow::addPointNoClick(point p, bool my_cut_flag)
+{
+    request req;
+    req.operation = ADD_POINT;
+    req.data = data;
+    req.cut_flag = my_cut_flag;
+    req.p = p;
+    req.scene = scene;
+    req.view = ui->graphicsView;
+    int rc = request_handle(req);
+    if (rc == 1)
+        error_message("Ошибка при вводе точки! Такая точка в отсекателе уже есть");
+    if (rc == 2)
+        error_message("Ошибка при вводе точки! Такая точка в фигуре уже есть");
+    if (!rc) {
+        push_cancel();
+        data = req.data;
+        req.operation = DRAW_ALL;
+        request_handle(req);
+    }
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -180,7 +286,7 @@ void MainWindow::my_mouse_move_event(QMouseEvent* event)
     }
 }
 
-void MainWindow::add_draw_point(const point& p) // поправить предупреждения
+void MainWindow::add_draw_point(const point& p)
 {
     request req;
     req.operation = ADD_POINT;
