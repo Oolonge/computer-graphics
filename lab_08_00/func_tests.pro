@@ -2,7 +2,7 @@ QT += core gui testlib widgets
 CONFIG += c++20 testcase
 
 CONFIG -= app_bundle #creates test.exe instead of test.exe.app
-TARGET = unit_tests.exe
+TARGET = func_tests.exe
 
 QMAKE_CXXFLAGS += -g -fprofile-instr-generate -fcoverage-mapping -O0
 QMAKE_LFLAGS += -fprofile-instr-generate
@@ -18,8 +18,7 @@ DESTDIR = out/
 # DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    unit_tests/unit_figure.cpp \
-    unit_tests/unit_main.cpp \
+    # src/main.cpp \
     src/buttons.cpp \
     src/color.cpp \
     src/cut.cpp \
@@ -30,10 +29,9 @@ SOURCES += \
     src/requests.cpp \
     func_data/test.cpp \
     func_data/testparser.cpp \
-    # src/main.cpp
+    func_data/func_main.cpp
 
 HEADERS += \
-    unit_tests/unit_figure.h \
     inc/cut.h \
     inc/drawing.h \
     inc/figure.h \
@@ -42,12 +40,10 @@ HEADERS += \
     inc/structures.h \
     func_data/test.h \
     func_data/testparser.h \
+    # unit_tests.h
 
 FORMS += \
     forms/mainwindow.ui
-
-RESOURCES += \
-    icons.qrc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
