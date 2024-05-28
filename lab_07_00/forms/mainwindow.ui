@@ -145,7 +145,7 @@
      <string/>
     </property>
     <property name="icon">
-     <iconset resource="icons.qrc">
+     <iconset resource="../icons.qrc">
       <normaloff>:/icons/icons/scale.png</normaloff>:/icons/icons/scale.png</iconset>
     </property>
     <property name="iconSize">
@@ -168,7 +168,7 @@
      <string/>
     </property>
     <property name="icon">
-     <iconset resource="icons.qrc">
+     <iconset resource="../icons.qrc">
       <normaloff>:/icons/icons/cursor.png</normaloff>:/icons/icons/cursor.png</iconset>
     </property>
     <property name="iconSize">
@@ -191,7 +191,7 @@
      <string/>
     </property>
     <property name="icon">
-     <iconset resource="icons.qrc">
+     <iconset resource="../icons.qrc">
       <normaloff>:/icons/icons/hand.png</normaloff>:/icons/icons/hand.png</iconset>
     </property>
     <property name="iconSize">
@@ -256,7 +256,7 @@
      <rect>
       <x>190</x>
       <y>460</y>
-      <width>171</width>
+      <width>175</width>
       <height>41</height>
      </rect>
     </property>
@@ -447,7 +447,7 @@
   </action>
  </widget>
  <resources>
-  <include location="icons.qrc"/>
+  <include location="../icons.qrc"/>
  </resources>
  <connections/>
 </ui>

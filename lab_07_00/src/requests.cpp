@@ -27,9 +27,9 @@ int handle_request(request& req)
     case CUT:
         cutDraw(req.data, req.scene, req.view);
         break;
-    }
     case DRAW_ALL:
         DrawAll(req.data, req.scene, req.view);
         break;
+    }
     return rc;
 }

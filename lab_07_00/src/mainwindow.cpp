@@ -47,6 +47,100 @@ MainWindow::MainWindow(QWidget* parent)
     ui->pushButton_reset_scale->setToolTip("Сброс масштабирования.");
 }
 
+MainWindow::MainWindow(Test test, QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    // initial colors;
+    data.cut_color = Qt::blue;
+    data.line_color = Qt::black;
+    data.visible_color = QColor("#FF0000");
+
+    scene = new QGraphicsScene(this);
+    ui->graphicsView->setScene(scene);
+    ui->graphicsView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->viewport()->installEventFilter(this);
+
+    ui->radioButton_cut->setChecked(cut_flag);
+    ui->pushButton_cancel->setEnabled(false);
+
+    ui->graphicsView->setMouseTracking(true);
+    ui->pushButton_hand_mode->setEnabled(true);
+    ui->pushButton_cursor_mode->setEnabled(false);
+    hand_flag = false;
+
+    data.lines.push_back({});
+    data.cut_amount = 0;
+
+    if (!test.isEmpty())
+    {
+        this->populateTestData(test);
+    }
+}
+
+void MainWindow::populateTestData(Test test)
+{
+    if (!test.is_full())
+        return;
+
+    putPointNoClick(test.cut().p1, true);
+    putPointNoClick(test.cut().p2, true);
+    putPointNoClick(test.point_1(), false);
+    putPointNoClick(test.point_2(), false);
+    on_pushButton_cut_clicked();
+
+    QRectF sceneRect = scene->sceneRect();
+    QSize imageSize(sceneRect.size().toSize());
+    QImage image(imageSize, QImage::Format_ARGB32);
+    image.fill(Qt::white);
+
+    QPainter painter(&image);
+    scene->render(&painter);
+    QString filename = QString("/Users/administrator/Desktop/qt/C++/lab_07_00/func_data/pics/%1.png").arg(test.name());
+    image.save(filename, "png");
+
+    this->deleteLater();
+}
+
+void MainWindow::putPointNoClick(point p, bool my_flag)
+{
+    process_flag = !process_flag;
+    point lp = data.lines[data.lines.size() - 1].p1;
+    Qt::KeyboardModifiers key = QApplication::queryKeyboardModifiers();
+    if (key == Qt::ShiftModifier && !ui->radioButton_cut->isChecked()) {
+        point d = { abs(lp.x - p.x), abs(lp.y - p.y) };
+        if (d.x < d.y)
+            p.x = lp.x;
+        else
+            p.y = lp.y;
+    }
+    request req;
+    req.operation = ADD_POINT;
+    req.data = data;
+    req.cut_flag = my_flag;
+    req.p = p;
+    if (ui->radioButton_cut->isChecked())
+        req.number = data.cut_amount + 1;
+    req.scene = scene;
+    req.view = ui->graphicsView;
+    int rc = handle_request(req);
+    if (rc == 1)
+        error_message("Ошибка при вводе точке! Отсекатель вырожден");
+    if (rc == 2)
+        error_message("Ошибка при вводе точки! Начальная и конечная точки линии совпадают");
+    if (!rc) {
+        push_cancel();
+        data = req.data;
+        data.cut_amount = req.number;
+        req.operation = DRAW_ALL;
+        handle_request(req);
+    }
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;

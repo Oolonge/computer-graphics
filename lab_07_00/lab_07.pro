@@ -24,6 +24,8 @@ SOURCES += \
     src/mainwindow.cpp \
     src/menu.cpp \
     src/requests.cpp \
+    func_data/test.cpp \
+    func_data/testparser.cpp \
     # unit_figure.cpp \
     # unit_main.cpp
 
@@ -34,6 +36,8 @@ HEADERS += \
     inc/mainwindow.h \
     inc/requests.h \
     inc/structures.h \
+    func_data/test.h \
+    func_data/testparser.h \
     # unit_figure.h
 
 FORMS += \

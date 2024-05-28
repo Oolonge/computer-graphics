@@ -2,7 +2,7 @@ QT += core gui testlib widgets
 CONFIG += c++20 testcase
 
 CONFIG -= app_bundle #creates test.exe instead of test.exe.app
-TARGET = unit_tests.exe
+TARGET = func_tests.exe
 
 QMAKE_CXXFLAGS += -g -fprofile-instr-generate -fcoverage-mapping -O0
 QMAKE_LFLAGS += -fprofile-instr-generate
@@ -26,14 +26,11 @@ SOURCES += \
     src/mainwindow.cpp \
     src/menu.cpp \
     src/requests.cpp \
-    unit_tests/unit_figure.cpp \
-    unit_tests/unit_main.cpp \
     func_data/test.cpp \
     func_data/testparser.cpp \
-    # main.cpp
+    func_data/func_main.cpp \
 
 HEADERS += \
-    unit_tests/unit_figure.h \
     inc/cut.h \
     inc/drawing.h \
     inc/figure.h \
@@ -45,9 +42,6 @@ HEADERS += \
 
 FORMS += \
     forms/mainwindow.ui
-
-RESOURCES += \
-    icons.qrc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

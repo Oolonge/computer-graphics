@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QMainWindow>
 #include <stack>
+#include "../func_data/test.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,7 +18,8 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget* parent = nullptr);
+    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(Test test, QWidget *parent = nullptr);
     ~MainWindow();
 
     // overrides
@@ -30,6 +32,10 @@ public:
     void push_cancel();
     void error_message(QString str);
     void add_draw_point(const point& p);
+
+    // for functional testing
+    void populateTestData(Test test);
+    void putPointNoClick(point p, bool my_flag);
 
 private slots:
     // implemented in color.cpp
